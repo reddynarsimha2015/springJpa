@@ -1,0 +1,58 @@
+package com.nt.configuration;
+
+import javax.sql.DataSource;
+
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+@Configuration
+public class MultipleDataSourceConfiguration {
+	
+	@Bean
+	@ConfigurationProperties("app.datasource.first")
+	private DataSourceProperties firstDataSourceProperties() {
+		
+		return  new DataSourceProperties();
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Bean
+	public DataSource firstDataSource() {
+		return firstDataSourceProperties()
+				.initializeDataSourceBuilder()
+				.type(DataSource.class).build();
+	}
+
+	@Bean
+	public JdbcTemplate firstJdbcTemplate() {
+		return new JdbcTemplate(firstDataSource());
+	}
+	
+	
+	@Bean
+	@ConfigurationProperties("app.datasource.second")
+	private DataSourceProperties secondDataSourceProperties() {
+		
+		return  new DataSourceProperties();
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Bean
+	public DataSource secondDataSource() {
+		return secondDataSourceProperties()
+				.initializeDataSourceBuilder()
+				.type(DataSource.class).build();
+	}
+
+	@Bean
+	public JdbcTemplate secondJdbcTemplate() {
+		return new JdbcTemplate(secondDataSource());
+	}
+	
+
+}
